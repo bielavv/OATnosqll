@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PANIFICADORA ALFA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            
+            <h1> PANIFICADORA ALFA</h1>
+            <nav class="mobile-nav">
+                <button onclick="mostrarSecao('insumos')"> Insumos</button>
+                <button onclick="mostrarSecao('produtos')"> Produtos</button>
+                <button onclick="mostrarSecao('vendas')"> Vendas</button>
+                <button onclick="mostrarSecao('balanco')"> Balanço</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Seção Insumos -->
+           <section id="insumos" class="secao ativa">
+    <h2>Controle de Insumos</h2>
+    
+            <!-- Formulário de Cadastro -->
+           <div class="card-form">
+        <h3>Cadastrar Novo Insumo</h3>
+        <form id="formInsumo" class="form-mobile">
+            <input type="text" id="nomeInsumo" placeholder="Nome do insumo" required>
+            <input type="number" id="quantidadeInsumo" placeholder="Quantidade inicial" step="0.001" min="0" required>
+            <input type="text" id="unidadeInsumo" placeholder="Unidade (kg, g, un)" required>
+            <input type="number" id="custoInsumo" placeholder="Custo unitário" step="0.01" min="0" required>
+            <button type="submit">Cadastrar Insumo</button>
+        </form>
+           </div>
+            <!-- Lista de Insumos -->
+           <div id="listaInsumos" class="lista"></div>
+           </section>
+
+            <!-- Modal para Editar/Adicionar Estoque -->
+            <div id="modalInsumo" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modalTitulo">Editar Insumo</h2>
+        
+        <form id="formEditarInsumo" class="form-mobile">
+            <input type="hidden" id="editarId">
+            
+            <div class="form-group">
+                <label for="editarNome">Nome:</label>
+                <input type="text" id="editarNome" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="editarUnidade">Unidade:</label>
+                <input type="text" id="editarUnidade" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="editarCusto">Custo Unitário (R$):</label>
+                <input type="number" id="editarCusto" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="editarQuantidade">Quantidade em Estoque:</label>
+                <input type="number" id="editarQuantidade" step="0.001" min="0" required>
+            </div>
+            
+            <div class="botoes-modal">
+                <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                <button type="button" id="btnAdicionarEstoque" class="btn-adicionar-estoque">
+                     Adicionar ao Estoque
+                </button>
+            </div>
+        </form>
+        
+        <!-- Formulário para Adicionar Estoque -->
+        <form id="formAdicionarEstoque" class="form-mobile" style="display: none;">
+            <h3>Adicionar ao Estoque</h3>
+            <div class="form-group">
+                <label for="quantidadeAdicionar">Quantidade a Adicionar:</label>
+                <input type="number" id="quantidadeAdicionar" step="0.001" min="0.001" required>
+                <span id="unidadeAdicionar"></span>
+            </div>
+            <div class="botoes-modal">
+                <button type="submit" class="btn-confirmar">Confirmar</button>
+                <button type="button" id="btnCancelarAdicionar" class="btn-cancelar">Cancelar</button>
+            </div>
+        </form>
+    </div>
+            </div>
+            <!-- Seção Produtos -->
+            <section id="produtos" class="secao">
+    <h2>Catálogo de Produtos</h2>
+    
+    <div class="card-form">
+        <h3>Cadastrar Novo Produto</h3>
+        <form id="formProduto" class="form-mobile">
+            <input type="text" id="nomeProduto" placeholder="Nome do produto" required>
+            <textarea id="descricaoProduto" placeholder="Descrição"></textarea>
+            <input type="text" id="categoriaProduto" placeholder="Categoria">
+        
+            
+            <!-- Lista de Ingredientes -->
+            <div class="secao-ingredientes">
+                <h4>Ingredientes do Produto</h4>
+                <div id="listaIngredientes" class="lista-ingredientes"></div>
+                <button type="button" class="btn-adicionar" onclick="adicionarIngrediente()">
+                    Adicionar Ingrediente
+                </button>
+            </div>
+            
+            <!-- Preço Calculado -->
+            <div class="preco-calculado">
+                <strong>Custo Total: R$ <span id="custoTotal">0.00</span></strong>
+                <input type="number" id="precoProduto" placeholder="Preço final de venda" step="0.01" required>
+            </div>
+            
+            <button type="submit">Cadastrar Produto</button>
+        </form>
+    </div>
+    
+    <div id="listaProdutos" class="lista"></div>
+            </section>
+
+            <!-- Seção Vendas -->
+            <section id="vendas" class="secao">
+                <h2>Registro de Vendas</h2>
+                <form id="formVenda" class="form-mobile">
+                    <select id="produtoVenda" required>
+                        <option value="">Selecione um produto</option>
+                    </select>
+                    <input type="number" id="quantidadeVenda" placeholder="Quantidade" required>
+                    <input type="text" id="clienteVenda" placeholder="Cliente (opcional)">
+                    <button type="submit">Registrar Venda</button>
+                </form>
+                <div id="listaVendas" class="lista"></div>
+            </section>
+
+            <!-- Seção Balanço -->
+            <section id="balanco" class="secao">
+                <h2>Balanço Financeiro</h2>
+                <div class="filtros">
+                    <input type="month" id="mesBalanco">
+                    <button onclick="carregarBalanco()">Carregar Balanço</button>
+                </div>
+                <div id="resultadoBalanco" class="balanco-resultado"></div>
+            </section>
+
+            <!-- Template para ingrediente (hidden) -->
+            <template id="templateIngrediente">
+    <div class="ingrediente-item">
+        <select class="select-insumo" required onchange="atualizarUnidade(this)">
+            <option value="">Selecione um insumo</option>
+        </select>
+        <input type="number" class="quantidade-ingrediente" placeholder="Quantidade" step="0.001" min="0.001" required oninput="calcularPreco()">
+        <span class="unidade-ingrediente">-</span>
+        <span class="custo-ingrediente">R$ 0.00</span>
+        <button type="button" class="btn-remover" onclick="removerIngrediente(this)"></button>
+    </div>
+            </template>
+
+        </main>
+    </div>
+        <script src="script.js"></script>
+</body>
+</html>
