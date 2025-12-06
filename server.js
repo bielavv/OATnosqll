@@ -10,8 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+
 // Conexão MongoDB - compatível com Render
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://gabrielUnexFeira:D%4022bb30@alpha.1ddaizr.mongodb.net/sistema-confeiteira?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
