@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
+const API_URL = window.location.origin + '/api';
 
 // Conexão MongoDB - compatível com Render
 const MONGODB_URI = process.env.MONGODB_URI;
